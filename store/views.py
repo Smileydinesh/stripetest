@@ -32,55 +32,55 @@ def cart_detail(request):
 
 
 def checkout(request):
-    if request.method == 'POST':
-        # Create Stripe Checkout Session
-        domain_url = 'http://127.0.0.1:8000/'  # Change to your domain in prod (e.g., https://yourapp.com)
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-
-        cart = request.session.get('cart', {})
-        line_items = []
-        total = Decimal('0')
-        for product_id, quantity in cart.items():
-            product = get_object_or_404(Product, id=product_id)
-            subtotal = product.price * quantity
-            total += subtotal
-            line_items.append({
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {
-                        'name': product.name,
-                    },
-                    'unit_amount': int(product.price * 100),  # Cents
-                },
-                'quantity': quantity,
-            })
-
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=line_items,
-                mode='payment',
-                success_url=domain_url + 'success/?session_id={CHECKOUT_SESSION_ID}',  # Points to /success/
-                cancel_url=domain_url + 'cancel/',  # Points to /cancel/
-            )
-            # Clear cart after session creation (or on webhook success)
-            request.session['cart'] = {}
-            return redirect(checkout_session.url, code=303)
-        except Exception as e:
-            return render(request, 'store/checkout_error.html', {'error': str(e)})
-
-    # GET: Show checkout form
     cart = request.session.get('cart', {})
+
+    # Safety check
     if not cart:
         return redirect('product_list')
-    total = sum(
-        get_object_or_404(Product, id=pid).price * qty
-        for pid, qty in cart.items()
-    )
-    return render(request, 'store/checkout.html', {
-        'total': total,
-        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
-    })
+
+    # ✅ USE RENDER DOMAIN (NOT localhost)
+    domain_url = "https://stripetest-1-xhrz.onrender.com/"
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    line_items = []
+
+    for product_id, quantity in cart.items():
+        product = get_object_or_404(Product, id=product_id)
+
+        line_items.append({
+            'price_data': {
+                'currency': 'usd',
+                'product_data': {
+                    'name': product.name,
+                },
+                'unit_amount': int(product.price * 100),
+            },
+            'quantity': quantity,
+        })
+
+    # 🔴 Stripe requires at least one item
+    if not line_items:
+        return redirect('cart_detail')
+
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=domain_url + 'success/?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=domain_url + 'cancel/',
+        )
+
+        # Clear cart AFTER redirect (demo safe)
+        request.session['cart'] = {}
+
+        return redirect(checkout_session.url)
+
+    except Exception as e:
+        print("Stripe error:", e)
+        return render(request, 'store/checkout_error.html', {'error': str(e)})
+
 
 def checkout_success(request):
     session_id = request.GET.get('session_id')
