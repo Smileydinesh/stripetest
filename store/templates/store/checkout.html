@@ -1,0 +1,18 @@
+<h1>Checkout</h1>
+<p>Total: ${{ total }}</p>
+<form method="post" id="payment-form">
+    {% csrf_token %}
+    <button type="submit" id="submit">Pay ${{ total }} with Stripe</button>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ stripe_publishable_key }}');  // Still load Stripe if needed for future customizations
+    var form = document.getElementById('payment-form');
+    var button = document.getElementById('submit');
+    form.addEventListener('submit', function(event) {
+        // Just show loading—no preventDefault!
+        button.textContent = 'Processing...';
+        button.disabled = true;
+    });
+</script>

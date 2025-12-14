@@ -1,0 +1,8 @@
+<h1>Cart</h1>
+<ul>
+{% for item in cart_items %}
+    <li>{{ item.product.name }} x{{ item.quantity }}: ${{ item.subtotal }}</li>
+{% endfor %}
+</ul>
+<p>Total: ${{ total }}</p>
+<a href="{% url 'checkout' %}">Checkout</a>
