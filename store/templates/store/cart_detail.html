@@ -1,8 +1,68 @@
-<h1>Cart</h1>
-<ul>
-{% for item in cart_items %}
-    <li>{{ item.product.name }} x{{ item.quantity }}: ${{ item.subtotal }}</li>
-{% endfor %}
-</ul>
-<p>Total: ${{ total }}</p>
-<a href="{% url 'checkout' %}">Checkout</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+        .cart-box {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            padding: 0;
+            list-style: none;
+        }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: right;
+        }
+        .btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cart-box">
+    <h1>🛒 Your Cart</h1>
+
+    <ul>
+        {% for item in cart_items %}
+        <li>
+            {{ item.product.name }} × {{ item.quantity }}
+            — <strong>${{ item.subtotal }}</strong>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p class="total">Total: ${{ total }}</p>
+
+    <a class="btn" href="{% url 'checkout' %}">Proceed to Checkout</a>
+</div>
+
+</body>
+</html>
