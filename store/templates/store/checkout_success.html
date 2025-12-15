@@ -1,3 +1,167 @@
-<h1>Payment Successful!</h1>
-<p>Thank you for your purchase. Your order has been confirmed.</p>
-<a href="{% url 'product_list' %}">Continue Shopping</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment Successful</title>
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================
+       THEME VARIABLES
+    ===================== */
+    :root {
+      --bg-dark: #0a2f26;
+      --card-bg: #103d31;
+      --accent: #facc15;
+      --success: #22c55e;
+      --text-main: #e8f3ef;
+      --text-muted: #b7d9cd;
+    }
+
+    /* =====================
+       RESET & BASE
+    ===================== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0f4a3a, var(--bg-dark));
+      font-family: "Inter", system-ui, sans-serif;
+      display: grid;
+      place-items: center;
+      color: var(--text-main);
+    }
+
+    /* =====================
+       CARD
+    ===================== */
+    .success-card {
+      background: linear-gradient(
+        180deg,
+        rgba(16, 61, 49, 0.96),
+        rgba(10, 47, 38, 0.96)
+      );
+      border-radius: 20px;
+      padding: 3.5rem 3rem;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      animation: slideUp 0.8s ease;
+    }
+
+    /* =====================
+       ICON
+    ===================== */
+    .success-icon {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at top, #34d399, var(--success));
+      display: grid;
+      place-items: center;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #022c22;
+      box-shadow:
+        0 0 0 10px rgba(34, 197, 94, 0.15),
+        0 20px 40px rgba(34, 197, 94, 0.35);
+      animation: pop 0.6s ease 0.2s both;
+    }
+
+    /* =====================
+       TEXT
+    ===================== */
+    h1 {
+      margin: 0.6rem 0 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 2.2rem;
+    }
+
+    /* =====================
+       BUTTON
+    ===================== */
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2.3rem;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--bg-dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 35px rgba(250, 204, 21, 0.4);
+    }
+
+    .note {
+      margin-top: 1.8rem;
+      font-size: 0.85rem;
+      color: rgba(183, 217, 205, 0.75);
+    }
+
+    /* =====================
+       ANIMATIONS
+    ===================== */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="success-card">
+    <div class="success-icon">✓</div>
+
+    <h1>Payment Successful</h1>
+
+    <p>
+      Thank you for your purchase. Your order has been confirmed and is now
+      being processed.
+    </p>
+
+    <a href="{% url 'product_list' %}" class="btn-primary">
+      Continue Shopping
+    </a>
+
+    <div class="note">
+      A confirmation email has been sent to your registered email address.
+    </div>
+  </section>
+</body>
+</html>
